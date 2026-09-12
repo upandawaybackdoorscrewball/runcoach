@@ -1,0 +1,506 @@
+# ── Model provider ────────────────────────────────────────────────────
+# Replace the placeholders with your provider. See README.md "Filling in placeholders".
+# Examples: provider openrouter + model anthropic/claude-sonnet-4.5 + base_url https://openrouter.ai/api/v1
+#           provider openai-codex (OAuth via `hermes auth`) + model gpt-5.x + base_url https://chatgpt.com/backend-api/codex
+model:
+  default: {{MODEL}}
+  provider: {{MODEL_PROVIDER}}
+  base_url: {{MODEL_BASE_URL}}
+# Optional automatic failover. Delete this list to disable, or fill in one or more entries.
+fallback_providers:
+  - provider: {{FALLBACK_PROVIDER}}
+    model: {{FALLBACK_MODEL}}
+    base_url: {{FALLBACK_BASE_URL}}
+    api_mode: chat_completions
+toolsets:
+  - hermes-cli
+  - hermes-telegram
+  - vision
+  - web
+  - file
+  - memory
+  - session_search
+  - skills
+  - cronjob
+  - messaging
+agent:
+  max_turns: 90
+  gateway_timeout: 1800
+  restart_drain_timeout: 180
+  api_max_retries: 3
+  service_tier: ''
+  tool_use_enforcement: auto
+  gateway_timeout_warning: 900
+  clarify_timeout: 600
+  gateway_notify_interval: 180
+  gateway_auto_continue_freshness: 3600
+  image_input_mode: auto
+  disabled_toolsets: []
+terminal:
+  backend: docker
+  modal_mode: auto
+  cwd: ${COACH_VAULT}
+  timeout: 180
+  env_passthrough:
+    - STRAVA_CLIENT_ID
+    - STRAVA_CLIENT_SECRET
+    - STRAVA_REFRESH_TOKEN
+  shell_init_files: []
+  auto_source_bashrc: true
+  docker_image: nikolaik/python-nodejs:python3.11-nodejs20
+  docker_forward_env:
+    - STRAVA_CLIENT_ID
+    - STRAVA_CLIENT_SECRET
+    - STRAVA_REFRESH_TOKEN
+  singularity_image: docker://nikolaik/python-nodejs:python3.11-nodejs20
+  modal_image: nikolaik/python-nodejs:python3.11-nodejs20
+  daytona_image: nikolaik/python-nodejs:python3.11-nodejs20
+  vercel_runtime: node24
+  container_cpu: 2.0
+  container_memory: 6144
+  container_disk: 51200
+  container_persistent: true
+  docker_volumes:
+    # host vault directory : in-container path. COACH_VAULT defaults to /wiki (see README).
+    - ${COACH_VAULT_HOST}:${COACH_VAULT}:rw
+  docker_mount_cwd_to_workspace: false
+  docker_extra_args: []
+  docker_run_as_host_user: false
+  persistent_shell: true
+web:
+  backend: ''
+  search_backend: ''
+  extract_backend: ''
+browser:
+  inactivity_timeout: 120
+  command_timeout: 30
+  record_sessions: false
+  allow_private_urls: false
+  engine: auto
+  auto_local_for_private_urls: true
+  cdp_url: ''
+  dialog_policy: must_respond
+  dialog_timeout_s: 300
+  camofox:
+    managed_persistence: false
+    user_id: ''
+    session_key: ''
+    adopt_existing_tab: false
+checkpoints:
+  enabled: false
+  max_snapshots: 20
+  max_total_size_mb: 500
+  max_file_size_mb: 10
+  auto_prune: true
+  retention_days: 7
+  min_interval_hours: 24
+  delete_orphans: true
+file_read_max_chars: 100000
+tool_output:
+  max_bytes: 50000
+  max_lines: 2000
+  max_line_length: 2000
+tool_loop_guardrails:
+  warnings_enabled: true
+  hard_stop_enabled: false
+  warn_after:
+    exact_failure: 2
+    same_tool_failure: 3
+    idempotent_no_progress: 2
+  hard_stop_after:
+    exact_failure: 5
+    same_tool_failure: 8
+    idempotent_no_progress: 5
+compression:
+  enabled: true
+  threshold: 0.5
+  target_ratio: 0.2
+  protect_last_n: 20
+  hygiene_hard_message_limit: 400
+  protect_first_n: 3
+prompt_caching:
+  cache_ttl: 5m
+openrouter:
+  response_cache: true
+  response_cache_ttl: 300
+  min_coding_score: 0.65
+bedrock:
+  region: ''
+  discovery:
+    enabled: true
+    provider_filter: []
+    refresh_interval: 3600
+  guardrail:
+    guardrail_identifier: ''
+    guardrail_version: ''
+    stream_processing_mode: async
+    trace: disabled
+auxiliary:
+  vision:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 120
+    download_timeout: 30
+  compression:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 120
+  skills_hub:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 30
+  approval:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 30
+  mcp:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 30
+  title_generation:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 30
+  triage_specifier:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 120
+  curator:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 600
+  web_extract:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 360
+  session_search:
+    provider: auto
+    model: ''
+    base_url: ''
+    api_key: ''
+    timeout: 30
+    extra_body: {}
+    max_concurrency: 3
+display:
+  compact: false
+  personality: ''
+  resume_display: full
+  busy_input_mode: interrupt
+  tui_auto_resume_recent: false
+  bell_on_complete: false
+  show_reasoning: false
+  streaming: false
+  timestamps: false
+  final_response_markdown: strip
+  persistent_output: true
+  persistent_output_max_lines: 200
+  inline_diffs: true
+  file_mutation_verifier: true
+  show_cost: false
+  skin: default
+  language: en
+  tui_status_indicator: kaomoji
+  user_message_preview:
+    first_lines: 2
+    last_lines: 2
+  interim_assistant_messages: true
+  tool_progress_command: false
+  tool_preview_length: 0
+  ephemeral_system_ttl: 0
+  runtime_footer:
+    enabled: false
+    fields:
+      - model
+      - context_pct
+      - cwd
+  copy_shortcut: auto
+  pet:
+    enabled: false
+    slug: cash-cuy
+  tool_progress: all
+dashboard:
+  theme: default
+  show_token_analytics: false
+privacy:
+  redact_pii: false
+tts:
+  provider: edge
+  edge:
+    voice: {{TTS_EDGE_VOICE}}  # e.g. an Edge neural voice name
+  elevenlabs:
+    voice_id: {{TTS_ELEVENLABS_VOICE_ID}}
+    model_id: eleven_multilingual_v2
+  openai:
+    model: gpt-4o-mini-tts
+    voice: alloy
+  xai:
+    voice_id: eve
+    language: en
+    sample_rate: 24000
+    bit_rate: 128000
+  mistral:
+    model: voxtral-mini-tts-2603
+    voice_id: {{TTS_MISTRAL_VOICE_ID}}
+  neutts:
+    ref_audio: ''
+    ref_text: ''
+    model: neuphonic/neutts-air-q4-gguf
+    device: cpu
+  piper:
+    voice: en_US-lessac-medium
+stt:
+  enabled: true
+  local:
+    model: base
+    language: ''
+  openai:
+    model: whisper-1
+  mistral:
+    model: voxtral-mini-latest
+  provider: local
+voice:
+  record_key: ctrl+b
+  max_recording_seconds: 120
+  auto_tts: false
+  beep_enabled: true
+  silence_threshold: 200
+  silence_duration: 3.0
+human_delay:
+  mode: 'off'
+  min_ms: 800
+  max_ms: 2500
+context:
+  engine: compressor
+memory:
+  memory_enabled: true
+  user_profile_enabled: true
+  memory_char_limit: 2200
+  user_char_limit: 1375
+  provider: ''
+delegation:
+  model: ''
+  provider: ''
+  base_url: ''
+  api_key: ''
+  api_mode: ''
+  inherit_mcp_toolsets: true
+  max_iterations: 250
+  child_timeout_seconds: 600
+  reasoning_effort: ''
+  max_concurrent_children: 10
+  max_spawn_depth: 1
+  orchestrator_enabled: true
+  subagent_auto_approve: false
+prefill_messages_file: ''
+goals:
+  max_turns: 20
+skills:
+  external_dirs: []
+  template_vars: true
+  inline_shell: false
+  inline_shell_timeout: 10
+  guard_agent_created: false
+curator:
+  enabled: true
+  interval_hours: 168
+  min_idle_hours: 2
+  stale_after_days: 30
+  archive_after_days: 90
+  backup:
+    enabled: true
+    keep: 5
+timezone: ''
+slack:
+  require_mention: true
+  free_response_channels: ''
+  allowed_channels: ''
+discord:
+  require_mention: true
+  free_response_channels: ''
+  allowed_channels: ''
+  auto_thread: true
+  thread_require_mention: false
+  history_backfill: true
+  history_backfill_limit: 50
+  reactions: true
+  dm_role_auth_guild: ''
+  server_actions: ''
+telegram:
+  reactions: false
+  allowed_chats: ''
+mattermost:
+  require_mention: true
+  free_response_channels: ''
+  allowed_channels: ''
+matrix:
+  require_mention: true
+  free_response_rooms: ''
+  allowed_rooms: ''
+approvals:
+  mode: manual
+  timeout: 60
+  cron_mode: auto
+  mcp_reload_confirm: true
+  destructive_slash_confirm: true
+command_allowlist:
+  - execute_code
+  - script execution via heredoc
+hooks_auto_accept: false
+security:
+  allow_private_urls: false
+  redact_secrets: true
+  tirith_enabled: true
+  tirith_path: tirith
+  tirith_timeout: 5
+  tirith_fail_open: true
+  website_blocklist:
+    enabled: false
+    domains: []
+    shared_files: []
+  acked_advisories: []
+  allow_lazy_installs: true
+cron:
+  wrap_response: true
+kanban:
+  dispatch_in_gateway: true
+  dispatch_interval_seconds: 60
+  failure_limit: 2
+code_execution:
+  mode: project
+logging:
+  level: INFO
+  max_size_mb: 5
+  backup_count: 3
+model_catalog:
+  enabled: true
+  url: https://hermes-agent.nousresearch.com/docs/api/model-catalog.json
+network:
+  force_ipv4: false
+sessions:
+  auto_prune: false
+  retention_days: 90
+  vacuum_after_prune: true
+  min_interval_hours: 24
+onboarding:
+  seen:
+    busy_input_prompt: true
+updates:
+  pre_update_backup: false
+  backup_keep: 5
+lsp:
+  enabled: true
+  wait_mode: document
+  wait_timeout: 5.0
+  install_strategy: auto
+x_search:
+  model: {{X_SEARCH_MODEL}}  # optional; only used by the x_search tool
+  timeout_seconds: 180
+  retries: 2
+_config_version: 41
+session_reset:
+  mode: both
+  idle_minutes: 1440
+  at_hour: 4
+mcp_servers:
+  garmin:
+    command: uvx
+    args:
+      - --python
+      - '3.12'
+      - --from
+      - git+https://github.com/Taxuspt/garmin_mcp
+      - garmin-mcp
+    tools:
+      include:
+        - get_activities_by_date
+        - get_activities_fordate
+        - get_activity
+        - get_activities
+        - count_activities
+        - get_activity_types
+        - get_activity_splits
+        - get_activity_typed_splits
+        - get_activity_split_summaries
+        - get_activity_weather
+        - get_activity_hr_in_timezones
+        - get_activity_power_in_timezones
+        - get_activity_exercise_sets
+        - get_stats
+        - get_user_summary
+        - get_stats_and_body
+        - get_body_composition
+        - get_steps_data
+        - get_daily_steps
+        - get_weekly_steps
+        - get_training_readiness
+        - get_morning_training_readiness
+        - get_body_battery
+        - get_body_battery_events
+        - get_rhr_day
+        - get_heart_rates_summary
+        - get_sleep_summary
+        - get_sleep_data
+        - get_stress_summary
+        - get_weekly_stress
+        - get_respiration_summary
+        - get_spo2_data
+        - get_hrv_data
+        - get_hrv_trend
+        - get_weekly_intensity_minutes
+        - get_training_status
+        - get_training_effect
+        - get_training_load_trend
+        - get_vo2max_trend
+        - get_respiration_trend
+        - get_race_predictions
+        - get_hill_score
+        - get_endurance_score
+        - get_lactate_threshold
+        - get_fitnessage_data
+        - get_personal_record
+        - get_goals
+        - get_weigh_ins
+        - get_daily_weigh_ins
+        - get_workouts
+        - get_workout_by_id
+        - get_scheduled_workouts
+        - get_training_plan_workouts
+        - create_run_workout
+        - create_walk_run_workout
+        - create_z2_walk_workout
+        - create_strength_workout
+        - upload_workout
+        - schedule_workout
+        - schedule_workouts
+        - schedule_week
+        - unschedule_workout
+        - unschedule_workouts
+        - set_perceived_effort
+        - set_activity_feel
+        - get_nutrition_daily_food_log
+        - get_nutrition_daily_meals
+        - get_nutrition_daily_settings
+        - log_food
+        - get_full_name
+        - get_unit_system
+        - get_user_profile
+    enabled: true
+FATSECRET_CONSUMER_KEY: 96d70165d5d741faa2140854411eed4c

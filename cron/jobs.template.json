@@ -1,0 +1,95 @@
+{
+  "updated_at": null,
+  "jobs": [
+    {
+      "id": "5fcf944a5db1",
+      "name": "daily-morning-check-in",
+      "prompt": "You are Coach. At {{CHECKIN_TIME}} {{TIMEZONE}}, send {{ATHLETE_NAME}} a morning check-in message. Open with ONE concise felt-sense question covering sleep, energy, soreness, current morning weight, and anything I should know. Do NOT pull Garmin data. Do NOT build a full nutrition report. Do NOT calculate deficits. Wait for {{ATHLETE_NAME}}'s reply before providing stage two data. Keep the message under 100 words.",
+      "skills": [],
+      "skill": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 8 * * *",
+        "display": "0 8 * * *"
+      },
+      "schedule_display": "0 8 * * *",
+      "repeat": {
+        "times": null
+      },
+      "enabled": true,
+      "paused_at": null,
+      "paused_reason": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": null,
+      "enabled_toolsets": null,
+      "workdir": null
+    },
+    {
+      "id": "2dd88283083d",
+      "name": "strava-poll-weekdays",
+      "prompt": "Run strava_poll.py. If stdout is non-empty because a new activity was found, deliver stdout. Empty stdout means no new activity and must remain silent.",
+      "skills": [],
+      "skill": null,
+      "script": "strava_poll.py",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "*/15 19-23,0-1 * * 1-5",
+        "display": "*/15 19-23,0-1 * * 1-5"
+      },
+      "schedule_display": "*/15 19-23,0-1 * * 1-5",
+      "repeat": {
+        "times": null
+      },
+      "enabled": true,
+      "paused_at": null,
+      "paused_reason": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "thread_id": null
+      },
+      "enabled_toolsets": null,
+      "workdir": null
+    },
+    {
+      "id": "f5f61c3b04a6",
+      "name": "strava-poll-saturday",
+      "prompt": "Run strava_poll.py. If stdout non-empty (new activity), deliver stdout.",
+      "skills": [],
+      "skill": null,
+      "script": "strava_poll.py",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "*/15 * * * 6",
+        "display": "*/15 * * * 6"
+      },
+      "schedule_display": "*/15 * * * 6",
+      "repeat": {
+        "times": null
+      },
+      "enabled": true,
+      "paused_at": null,
+      "paused_reason": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "thread_id": null
+      },
+      "enabled_toolsets": null,
+      "workdir": null
+    }
+  ]
+}
